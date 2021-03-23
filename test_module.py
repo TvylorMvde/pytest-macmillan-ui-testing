@@ -23,14 +23,16 @@ def webdriver(request):
 @pytest.mark.usefixtures("webdriver")
 class TestMacmillanUI:
 
-    # This fixture will be run before each test
-    # Every single test starts from the homepage
+    # This fixture will be run before each test - every single test starts from homepage
     @pytest.fixture()
     def start_from_home_page(self):
         self.driver.get("https://www.macmillan.pl")
-        if self.driver.find_element_by_id("rodo-accept-all-cookies").is_displayed():
-            self.driver.find_element_by_id("rodo-accept-all-cookies").click()
-
+        try:
+            if self.driver.find_element_by_id("rodo-accept-all-cookies").is_displayed():
+                self.driver.find_element_by_id("rodo-accept-all-cookies").click()
+        except:
+            pass
+        
     # Check if cookies have been accepted
     def test_accept_cookies(self, start_from_home_page):
         assert self.driver.find_element_by_id("logo").is_displayed() == True, "Cookies test fail!"
