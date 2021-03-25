@@ -24,7 +24,7 @@ def webdriver(request):
 class TestMacmillanUI:
 
     # This fixture will be run before each test - every single test starts from homepage
-    @pytest.fixture()
+    @pytest.fixture(autouse=True)
     def start_from_home_page(self):
         self.driver.get("https://www.macmillan.pl")
         try:
@@ -34,12 +34,12 @@ class TestMacmillanUI:
             pass
         
     # Check if cookies have been accepted
-    def test_accept_cookies(self, start_from_home_page):
+    def test_accept_cookies(self):
         assert self.driver.find_element_by_id("logo").is_displayed() == True, "Cookies test fail!"
 
     # Search for representatives in given provinces and collect their names
     # Check if the found values match the expected ones
-    def test_find_representatives(self, start_from_home_page):
+    def test_find_representatives(self):
         provinces_to_test = ["lubelskie", "opolskie"]
         representatives = []
         self.driver.find_element_by_class_name("item-740").click()
@@ -57,7 +57,7 @@ class TestMacmillanUI:
     # Test the availability of the particular components of given products
     # Search the products' components and collect those with "Oprogramowanie tablicy interaktywnej" in their names
     # Compare found components with the expected ones
-    def test_products_availability(self, start_from_home_page):
+    def test_products_availability(self):
         main_tab = self.driver.current_window_handle
         products = ["Brainy klasa 5", "Bugs Team 3", "All Clear klasa 7"]
         self.driver.find_element_by_xpath('//*[@id="top"]/div[3]/nav/ul/li[6]/a').click()
@@ -82,7 +82,7 @@ class TestMacmillanUI:
             "All Clear klasa 7 Oprogramowanie tablicy interaktywnej (reforma 2017)"]
         assert results == expected
 
-    def test_add_products_to_basket(self, start_from_home_page):
+    def test_add_products_to_basket(self):
         # To be continued ...
         pass
 
