@@ -1,6 +1,7 @@
 import pytest
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
 from bs4 import BeautifulSoup
 
 
@@ -80,12 +81,40 @@ class TestMacmillanUI:
         expected = ["Brainy klasa 5 Oprogramowanie tablicy interaktywnej (reforma 2017)",\
             "Bugs Team 3 Oprogramowanie tablicy interaktywnej (reforma 2017)",\
             "All Clear klasa 7 Oprogramowanie tablicy interaktywnej (reforma 2017)"]
-        assert results == expected
+        assert results == expected, "Products availability test fail!"
 
-    def test_add_products_to_basket(self):
-        # To be continued ...
-        pass
-
+    # Test searches for given products' MEN numbers
+    # The dict with product:men_number pairs is created and compared to the expected dict
+    def test_find_men_number(self):
+        products = ["Tiger & Friends 2", "Tiger 1", "All Clear - klasa 7", "Evolution plus - klasa 4"]
+        actions = ActionChains(self.driver)
+        menu_item = self.driver.find_element_by_xpath('//*[@id="top"]/div[3]/nav/ul/li[3]/a')
+        self.driver.implicitly_wait(1)
+        submenu_item = self.driver.find_element_by_xpath('//*[@id="top"]/div[3]/nav/ul/li[3]/ul/li[6]/a')
+        actions.move_to_element(menu_item).perform()
+        actions.pause(1)
+        submenu_item.click()
+        soup = BeautifulSoup(self.driver.page_source, 'lxml')
+        tbodies = soup.find_all("tbody")
+        trs = sum((tbody.find_all("tr") for tbody in tbodies), [])
+        results = {}
+        for product in products:
+            for tr in trs:
+                try:
+                    title = tr.find("span", class_="level").text.strip()
+                    if product == title:
+                        men = tr.find(class_="men").text.strip()
+                        results[title] = men
+                except:
+                    pass
+        expected = {
+            "Tiger & Friends 2": "1051/2/2020",
+            "Tiger 1": "836/1/2017",
+            "All Clear - klasa 7": "848/1/2017",
+            "Evolution plus - klasa 4": "856/1/2017"
+        }
+        assert results == expected, "Finding men numbers test fail!"
+                    
 
 if __name__ == "__main__":
     pytest.main()
