@@ -20,9 +20,6 @@ RUN chmod +rwx chromedriver
 
 ENV DISPLAY=:99
 
-# chromedriver -d .
-# ENV PYTHONUNBUFFERED 1
-
 COPY requirements.txt .
 
 RUN pip install -r requirements.txt
