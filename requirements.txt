@@ -1,0 +1,4 @@
+beautifulsoup4==4.9.3
+lxml==4.6.2
+pytest==6.2.2
+selenium==3.141.0
