@@ -3,4 +3,5 @@ venv/
 .pytest_cache/
 __pycache__/
 .ipynb_checkpoints
-selenium-testing.ipynb
+chromedriver
+requirements.txt
