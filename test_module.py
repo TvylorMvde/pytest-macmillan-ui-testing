@@ -11,11 +11,15 @@ from bs4 import BeautifulSoup
 def webdriver(request):
     from selenium import webdriver
     from selenium.webdriver.chrome.options import Options
+    # from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
     chrome_options = Options()
     chrome_options.add_argument('--ignore-certificate-errors')
     chrome_options.add_argument("--incognito")
+    # chrome_options.add_argument("--headless")
+    # chrome_options.add_argument("--no-sandbox")
+    # chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_experimental_option("detach", True)
-    driver = webdriver.Chrome("./venv/chromedriver", options=chrome_options)
+    driver = webdriver.Chrome("./chromedriver", options=chrome_options)
     request.cls.driver = driver
     yield driver
     driver.close()
@@ -40,8 +44,9 @@ class TestMacmillanUI:
 
     # Search for representatives in given provinces and collect their names
     # Check if the found values match the expected ones
-    def test_find_representatives(self):
-        provinces_to_test = ["lubelskie", "opolskie"]
+    @pytest.mark.parametrize("provinces_to_test, expected", [(["lubelskie", "opolskie"], \
+        ["Radosław Łosiewicz", "Grzegorz Gębala", "Marek Grygorowicz"]), (["podlaskie"], ["Justyna Borowska"])])
+    def test_find_representatives(self, provinces_to_test, expected):
         representatives = []
         self.driver.find_element_by_class_name("item-740").click()
         for province in provinces_to_test:
@@ -52,7 +57,6 @@ class TestMacmillanUI:
             for person in people:
                 representatives.append(person.text)
             self.driver.back()
-        expected = ["Radosław Łosiewicz", "Grzegorz Gębala", "Marek Grygorowicz"]
         assert representatives == expected, "Find representatives test fail!"
 
     # Test the availability of the particular components of given products
@@ -114,7 +118,6 @@ class TestMacmillanUI:
             "Evolution plus - klasa 4": "856/1/2017"
         }
         assert results == expected, "Finding men numbers test fail!"
-                    
 
 if __name__ == "__main__":
     pytest.main()
