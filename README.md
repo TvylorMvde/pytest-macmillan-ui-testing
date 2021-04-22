@@ -50,7 +50,7 @@ pytest test_module.py
 * Check in your terminal if Docker has been successfully installed:
 
     ```
-    docker -version
+    docker --version
     OR
     docker -v
 
