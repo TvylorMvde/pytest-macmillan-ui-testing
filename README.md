@@ -35,7 +35,7 @@ pip3 install -r requirements.txt
 ```
 ### 5. Download chromedriver
 Navigate to https://chromedriver.chromium.org and download the latest stable release of chromedriver for your system.
->IMPORTANT: Extract the downloaded file chromedriver inside the cloned repository.
+>IMPORTANT: Extract the downloaded chromedriver file inside the cloned repository.
 
 ### 6. Run the tests
 ```
