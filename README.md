@@ -56,7 +56,7 @@ pytest test_module.py
 
     ## Docker version 20.10.5, build 55c4c88
     ```
-### 2. Run the container from Docker Hub
+### 2. Run the image's container from Docker Hub
 ```
 docker run tvylormvde/test_macmillan:test_macmillan
 ```
